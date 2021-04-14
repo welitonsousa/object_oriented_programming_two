@@ -1,10 +1,6 @@
 from person import Pessoa
 
 class Conta:
-  _numero: str
-  _titular: Pessoa
-  _saldo: float
-  _limite: float
 
   def __init__(self, titular: Pessoa):
     self._titular = titular

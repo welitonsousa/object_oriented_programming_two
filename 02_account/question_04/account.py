@@ -3,11 +3,6 @@ from history import Historico
 from datetime import datetime
 
 class Conta:
-  _numero: str
-  _titular: Pessoa
-  _saldo: float
-  _limite: float
-  _historico: Historico
 
   def __init__(self, titular: Pessoa):
     self._titular = titular

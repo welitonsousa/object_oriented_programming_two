@@ -1,5 +1,4 @@
 class Historico:
-  _historico: list
 
   def __init__(self):
     self._historico = []

@@ -1,9 +1,4 @@
 class Conta:
-  _numero: str
-  _titular: str
-  _saldo: float
-  _limite: float
-
   def __init__(self, titular: str):
     self._titular = titular
     self._limite = 500

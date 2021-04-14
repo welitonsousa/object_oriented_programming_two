@@ -1,7 +1,4 @@
 class Pessoa:
-  _nome: str
-  _sobrenome: str
-  _cpf: str
 
   def __init__(self, nome: str, sobrenome: str, cpf: str):
     self._nome = nome
