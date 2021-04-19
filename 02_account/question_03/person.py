@@ -7,7 +7,7 @@ class Pessoa:
 
   def getData(self):
     return {
-      nome: self._nome,
-      sobrenome: self._sobrenome,
-      cpf: self._cpf
+      "nome": self._nome,
+      "sobrenome": self._sobrenome,
+      "cpf": self._cpf
     }
