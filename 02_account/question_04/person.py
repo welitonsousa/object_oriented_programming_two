@@ -9,5 +9,6 @@ class Pessoa:
     return {
       "nome": self._nome,
       "sobrenome": self._sobrenome,
-      "cpf": self._cpf
+      "cpf": self._cpf,
+      "nomecompleto": self._nome+ " "+ self._sobrenome
     }
