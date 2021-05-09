@@ -1,15 +1,16 @@
 from person import Pessoa
 from history import Historico
 from datetime import datetime
+import uuid
+
 
 class Conta:
-
   def __init__(self, titular: Pessoa):
     self._titular = titular
     self._limite = 500
     self._saldo = 0
     self._historico = Historico()
-    self._numero = str(abs(hash('python')))
+    self._numero = str(uuid.uuid4())
 
   def sacar(self, value: float) -> bool:
     if value <= self._saldo:
