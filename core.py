@@ -19,17 +19,41 @@ class Main(QMainWindow, Rotas):
 
         self.tela_criar_conta.botao_cadastrar.clicked.connect(self.criar_conta)
         self.tela_criar_conta.botao_menu.clicked.connect(self.para_menu)
+
         self.tela_login.botao_menu.clicked.connect(self.para_menu)
         self.tela_login.botao_depositar.clicked.connect(self.botao_depositar)
+        self.tela_login.botao_sacar.clicked.connect(self.botao_sacar)
+        self.tela_login.botao_extrato.clicked.connect(self.botao_extrato)
+
         self.tela_depositar.botao_depositar.clicked.connect(self.depositar)
+        self.tela_depositar.botao_menu.clicked.connect(self.para_menu)
+
+        self.tela_sacar.botao_menu.clicked.connect(self.para_menu)
+        self.tela_sacar.botao_sacar.clicked.connect(self.sacar)
+
+        self.tela_extrato.botao_menu.clicked.connect(self.para_menu)
 
         self.conta_atual = None
 
+    def botao_extrato(self):
+        self.conta_atual = self.conta_existe()
+        if self.conta_atual != None:
+            self.extrato()
+            self.para_extrato()
+        else:
+            self.mensagem('Erro', 'Conta não encontrada')
 
     def botao_depositar(self):
         self.conta_atual = self.conta_existe()
         if self.conta_atual != None:
             self.para_depositar()
+        else:
+            self.mensagem('Erro', 'Conta não encontrada')
+
+    def botao_sacar(self):
+        self.conta_atual = self.conta_existe()
+        if self.conta_atual != None:
+            self.para_sacar()
         else:
             self.mensagem('Erro', 'Conta não encontrada')
 
@@ -41,9 +65,21 @@ class Main(QMainWindow, Rotas):
                 self.tela_depositar.edit_valor.setText('')
                 self.para_login()
             else:
-                self.mensagem('Erro', 'ALgo deu errado')
+                self.mensagem('Erro', 'Algo deu errado')
 
+    def sacar(self):
+        valor = self.tela_sacar.edit_valor.text()
+        if valor != '':
+            if Conta.sacar(self.conta_atual, float(valor)):
+                self.mensagem('Sucesso', 'Saque realizado com sucesso')
+                self.tela_sacar.edit_valor.setText('')
+                self.para_login()
+            else:
+                self.mensagem('Erro', 'Algo deu errado')
 
+    def extrato(self):
+        self.tela_extrato.edit_conta_aberta.setText(self.conta_atual.data_abertura)
+        self.tela_extrato.edit_saldo.setText(str(self.conta_atual.saldo))
 
     def conta_existe(self):
         numero = self.tela_login.edit_numero_conta.text()

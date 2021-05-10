@@ -13,7 +13,16 @@ class Conta:
     self._limite = 500
     self._saldo = 0
     self._historico = Historico()
+    self._data_abertura = str(datetime.now().strftime('%d/%m/%Y %H:%M'))
     self._numero = str(uuid.uuid4())[:4]
+
+  @property
+  def saldo(self):
+    return self._saldo
+
+  @property
+  def data_abertura(self):
+    return self._data_abertura
 
   def criar_conta(pessoa: Pessoa):
     conta = Conta(pessoa)
