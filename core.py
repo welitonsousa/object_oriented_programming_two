@@ -38,6 +38,8 @@ class Main(QMainWindow, Rotas):
         self.tela_transferir.botao_menu.clicked.connect(self.para_menu)
         self.tela_transferir.botao_transferir.clicked.connect(self.tranferir)
 
+        self.tela_login.botao_historico.clicked.connect(self.botao_historico)
+        self.tela_historico.botao_menu.clicked.connect(self.para_menu)
         self.conta_atual = None
 
     def botao_extrato(self):
@@ -61,9 +63,11 @@ class Main(QMainWindow, Rotas):
         if destinatario != '' and valor != '':
             conta_destino = Conta.busca_conta(destinatario)
             if conta_destino != None:
-                Conta.transferir(self.conta_atual, float(valor), conta_destino)
-                self.mensagem('Sucesso', 'Transferiancia realizada com sucesso')
-                self.para_login()
+                if Conta.transferir(self.conta_atual, float(valor), conta_destino):
+                    self.mensagem('Sucesso', 'Transferiancia realizada com sucesso')
+                    self.para_login()
+                else:
+                    self.mensagem('Erro', 'Algo deu errado')
             else:
                 self.mensagem('Erro', 'Conta não encontrada')
 
@@ -78,6 +82,15 @@ class Main(QMainWindow, Rotas):
         self.conta_atual = self.conta_existe()
         if self.conta_atual != None:
             self.para_sacar()
+        else:
+            self.mensagem('Erro', 'Conta não encontrada')
+
+    def botao_historico(self):
+        self.conta_atual = self.conta_existe()
+        if self.conta_atual != None:
+            for operacao in Conta.historico(self.conta_atual):
+                self.tela_historico.lista_itens.addItem(operacao)
+            self.para_historico()
         else:
             self.mensagem('Erro', 'Conta não encontrada')
 

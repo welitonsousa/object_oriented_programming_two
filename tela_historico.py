@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'tela_historico.ui'
+# Form implementation generated from reading ui file '.\tela_historico.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -14,36 +14,15 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class TelaHistorico(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(640, 480)
+        MainWindow.resize(640, 490)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.lista_itens = QtWidgets.QListWidget(self.centralwidget)
+        self.lista_itens.setGeometry(QtCore.QRect(20, 20, 601, 401))
+        self.lista_itens.setObjectName("lista_itens")
         self.botao_menu = QtWidgets.QPushButton(self.centralwidget)
-        self.botao_menu.setGeometry(QtCore.QRect(480, 380, 86, 26))
+        self.botao_menu.setGeometry(QtCore.QRect(550, 430, 75, 23))
         self.botao_menu.setObjectName("botao_menu")
-        self.edit_descricao = QtWidgets.QLineEdit(self.centralwidget)
-        self.edit_descricao.setEnabled(False)
-        self.edit_descricao.setGeometry(QtCore.QRect(130, 170, 381, 20))
-        self.edit_descricao.setReadOnly(True)
-        self.edit_descricao.setObjectName("edit_descricao")
-        self.edit_data = QtWidgets.QLineEdit(self.centralwidget)
-        self.edit_data.setEnabled(False)
-        self.edit_data.setGeometry(QtCore.QRect(220, 120, 181, 20))
-        self.edit_data.setReadOnly(False)
-        self.edit_data.setObjectName("edit_data")
-        self.botao_anterior = QtWidgets.QPushButton(self.centralwidget)
-        self.botao_anterior.setGeometry(QtCore.QRect(280, 210, 86, 26))
-        self.botao_anterior.setObjectName("botao_anterior")
-        self.label_historico = QtWidgets.QLabel(self.centralwidget)
-        self.label_historico.setGeometry(QtCore.QRect(260, 40, 181, 61))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(10)
-        sizePolicy.setVerticalStretch(19)
-        sizePolicy.setHeightForWidth(self.label_historico.sizePolicy().hasHeightForWidth())
-        self.label_historico.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(20)
-        self.label_historico.setFont(font)
-        self.label_historico.setObjectName("label_historico")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -56,8 +35,6 @@ class TelaHistorico(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.botao_menu.setText(_translate("MainWindow", "Menu"))
-        self.botao_anterior.setText(_translate("MainWindow", "Anterior"))
-        self.label_historico.setText(_translate("MainWindow", "Histórico"))
 
 
 if __name__ == "__main__":

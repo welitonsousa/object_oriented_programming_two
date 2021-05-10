@@ -56,7 +56,6 @@ class Conta:
       return destino.depositar(valor)
     return False
   
-  @property
   def historico(self) -> list:
-    return self._historico.get_historico
+    return self._historico.get_historico()
 
