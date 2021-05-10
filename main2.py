@@ -1,13 +1,13 @@
 from conta import Conta
 from pessoa import Pessoa
+from clientes import Clientes
 
-conta = Conta(Pessoa('weliton', 'sousa', '1234'))
-conta2 = Conta(Pessoa('1111', 'so12usa', '12344'))
+clientes = Clientes()
 
-conta.depositar(300)
-conta.sacar(200)
 
-conta.transfere(50, conta2)
+pessoa = Pessoa('weliton', 'sousa', '1234')
+conta = Conta(pessoa)
 
-for historico in conta.getData():
-  print(historico)
+clientes.adicionar_cliente(conta)
+
+
