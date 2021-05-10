@@ -12,8 +12,7 @@ from tela_menu import TelaMenu
 from tela_sacar import TelaSacar
 from tela_transferir import TelaTransferir
 
-from conta import Conta
-from pessoa import Pessoa
+
 
 
 class Ui_Main(QtWidgets.QWidget):
@@ -80,25 +79,3 @@ class Ui_Main(QtWidgets.QWidget):
         self.controle_telas.addWidget(self.stack_cadastrar_cliente)
         self.controle_telas.addWidget(self.stack_sacar)
         self.controle_telas.addWidget(self.stack_transferir)
-        
-
-
-class Main(QMainWindow, Ui_Main):
-    def __init__(self, parent=None):
-        super(Main, self).__init__(parent)
-        self.setupUi(self)
-        self.tela_menu.botao_login.clicked.connect(self.teste)
-
-    def teste(self):
-        self.mensagem('erro', 'algo deu errado')
-        
-
-
-    def mensagem(self, titulo: str, mensagem: str):
-        QMessageBox.information(None, titulo, mensagem)
-
-if __name__ == '__main__':
-    import sys
-    app = QApplication(sys.argv)
-    show_main = Main()
-    sys.exit(app.exec_())

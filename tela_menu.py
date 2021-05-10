@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class TelaMenu(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(640, 715)
+        MainWindow.resize(640, 480)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label_cadastrar = QtWidgets.QLabel(self.centralwidget)
