@@ -46,7 +46,7 @@ class Conta:
     self._historico.novo_historico('Extrato\nData: {}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M')))
     return 'Numero: {} \nSaldo: {}'.format(self._numero, self._saldo)
 
-  def transferir(self, valor: float, destino: Conta) -> bool:
+  def transferir(self, valor: float, destino) -> bool:
     if self.sacar(valor):
       return destino.depositar(valor)
     return False
