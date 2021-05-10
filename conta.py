@@ -13,22 +13,18 @@ class Conta:
     self._limite = 500
     self._saldo = 0
     self._historico = Historico()
-    self._numero = str(uuid.uuid4())
+    self._numero = str(uuid.uuid4())[:4]
 
   def criar_conta(pessoa: Pessoa):
     conta = Conta(pessoa)
     Conta.lista.append(conta)
-    return conta.numero
+    return conta._numero
   
   def busca_conta(numero_buscar: str):
     for conta in Conta.lista:
-      if numero_buscar == conta.numero:
+      if numero_buscar == conta._numero:
         return conta
     return None
-
-  @property
-  def numero(self):
-    self._numero
 
   def sacar(self, valor: float) -> bool:
     if valor <= self._saldo:
@@ -54,3 +50,4 @@ class Conta:
   @property
   def historico(self) -> list:
     return self._historico.get_historico
+

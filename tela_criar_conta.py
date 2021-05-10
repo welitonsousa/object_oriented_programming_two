@@ -40,17 +40,7 @@ class TelaCriarConta(object):
         self.botao_menu = QtWidgets.QPushButton(self.centralwidget)
         self.botao_menu.setGeometry(QtCore.QRect(510, 410, 86, 26))
         self.botao_menu.setObjectName("botao_menu")
-        self.edit_numero_conta = QtWidgets.QLineEdit(self.centralwidget)
-        self.edit_numero_conta.setEnabled(False)
-        self.edit_numero_conta.setGeometry(QtCore.QRect(230, 230, 181, 20))
-        self.edit_numero_conta.setText("")
-        self.edit_numero_conta.setReadOnly(False)
-        self.edit_numero_conta.setPlaceholderText("")
-        self.edit_numero_conta.setClearButtonEnabled(True)
-        self.edit_numero_conta.setObjectName("edit_numero_conta")
-        self.label_numero_conta = QtWidgets.QLabel(self.centralwidget)
-        self.label_numero_conta.setGeometry(QtCore.QRect(110, 230, 111, 20))
-        self.label_numero_conta.setObjectName("label_numero_conta")
+        
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -66,7 +56,7 @@ class TelaCriarConta(object):
         self.edit_cpf.setPlaceholderText(_translate("MainWindow", "CPF"))
         self.botao_cadastrar.setText(_translate("MainWindow", "Cadastrar"))
         self.botao_menu.setText(_translate("MainWindow", "Menu"))
-        self.label_numero_conta.setText(_translate("MainWindow", "Numero da conta"))
+
 
 
 if __name__ == "__main__":

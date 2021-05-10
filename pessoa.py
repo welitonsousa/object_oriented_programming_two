@@ -8,13 +8,12 @@ class Pessoa:
     self._cpf = cpf
 
   def cadastrar(nome: str, sobrenome: str, cpf: str):
-    if Pessoa.busca_pessoa(cpf) != None:
-      return False
+    if Pessoa.busca_pessoa(cpf) == None:
+      Pessoa.lista.append(Pessoa(nome, sobrenome, cpf))
+      return True
+    return False
 
-    Pessoa.lista.append(Pessoa(nome, sobrenome, cpf))
-    return True
-
-  property
+  @property
   def cpf(self):
     return self._cpf
 

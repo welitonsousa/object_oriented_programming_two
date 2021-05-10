@@ -16,6 +16,9 @@ class Main(QMainWindow, Rotas):
         self.tela_cadastrar_cliente.botao_cadastrar.clicked.connect(self.cadastrar_cliente)
         self.tela_cadastrar_cliente.botao_menu.clicked.connect(self.para_menu)
 
+        self.tela_criar_conta.botao_cadastrar.clicked.connect(self.criar_conta)
+        self.tela_criar_conta.botao_menu.clicked.connect(self.para_menu)
+
     def cadastrar_cliente(self):
         nome = self.tela_cadastrar_cliente.edit_nome.text()
         sobrenome = self.tela_cadastrar_cliente.edit_sobrenome.text()
@@ -30,6 +33,19 @@ class Main(QMainWindow, Rotas):
             else:
                 self.mensagem('Erro', 'CPF já cadastrado')
 
+    def criar_conta(self):
+        cpf = self.tela_criar_conta.edit_cpf.text()
+        if cpf != '':
+            pessoa = Pessoa.busca_pessoa(cpf)
+            if pessoa != None:
+                numero = 'numero da conta: ' + str(Conta.criar_conta(pessoa))
+                
+                self.mensagem('Sucesso', numero)
+                self.tela_criar_conta.edit_cpf.setText('')
+                self.tela_menu.edit_numero_conta.setText(str(len(Conta.lista)))
+            else:
+                self.mensagem('Erro', 'CPF não encontrado')
+            
     def mensagem(self, titulo: str, mensagem: str):
         QMessageBox.information(None, titulo, mensagem)
 
