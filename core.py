@@ -33,6 +33,11 @@ class Main(QMainWindow, Rotas):
 
         self.tela_extrato.botao_menu.clicked.connect(self.para_menu)
 
+
+        self.tela_login.botao_transferir.clicked.connect(self.botao_transferir)
+        self.tela_transferir.botao_menu.clicked.connect(self.para_menu)
+        self.tela_transferir.botao_transferir.clicked.connect(self.tranferir)
+
         self.conta_atual = None
 
     def botao_extrato(self):
@@ -47,6 +52,25 @@ class Main(QMainWindow, Rotas):
         self.conta_atual = self.conta_existe()
         if self.conta_atual != None:
             self.para_depositar()
+        else:
+            self.mensagem('Erro', 'Conta não encontrada')
+
+    def tranferir(self):
+        valor = self.tela_transferir.edit_valor.text()
+        destinatario = self.tela_transferir.edit_conta_Destinatario.text()
+        if destinatario != '' and valor != '':
+            conta_destino = Conta.busca_conta(destinatario)
+            if conta_destino != None:
+                Conta.transferir(self.conta_atual, float(valor), conta_destino)
+                self.mensagem('Sucesso', 'Transferiancia realizada com sucesso')
+                self.para_login()
+            else:
+                self.mensagem('Erro', 'Conta não encontrada')
+
+    def botao_transferir(self):
+        self.conta_atual = self.conta_existe()
+        if self.conta_atual != None:
+            self.para_transferir()
         else:
             self.mensagem('Erro', 'Conta não encontrada')
 

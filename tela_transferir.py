@@ -17,9 +17,9 @@ class TelaTransferir(object):
         MainWindow.resize(640, 480)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.botao_sacar = QtWidgets.QPushButton(self.centralwidget)
-        self.botao_sacar.setGeometry(QtCore.QRect(250, 170, 75, 23))
-        self.botao_sacar.setObjectName("botao_sacar")
+        self.botao_transferir = QtWidgets.QPushButton(self.centralwidget)
+        self.botao_transferir.setGeometry(QtCore.QRect(250, 170, 75, 23))
+        self.botao_transferir.setObjectName("botao_transferir")
         self.edit_valor = QtWidgets.QLineEdit(self.centralwidget)
         self.edit_valor.setGeometry(QtCore.QRect(200, 80, 181, 20))
         self.edit_valor.setText("")
@@ -47,7 +47,7 @@ class TelaTransferir(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.botao_sacar.setText(_translate("MainWindow", "Sacar"))
+        self.botao_transferir.setText(_translate("MainWindow", "Transferir"))
         self.edit_valor.setPlaceholderText(_translate("MainWindow", "VALOR"))
         self.botao_menu.setText(_translate("MainWindow", "Menu"))
         self.edit_conta_Destinatario.setPlaceholderText(_translate("MainWindow", "DESTINATARIO"))
