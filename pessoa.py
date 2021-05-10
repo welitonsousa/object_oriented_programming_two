@@ -5,9 +5,11 @@ class Pessoa:
     self._sobrenome = sobrenome
     self._cpf = cpf
 
+  @property
   def getData(self):
     return {
       "nome": self._nome,
       "sobrenome": self._sobrenome,
-      "cpf": self._cpf
+      "cpf": self._cpf,
+      "nomecompleto": self._nome+ " "+ self._sobrenome
     }

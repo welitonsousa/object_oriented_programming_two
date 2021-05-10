@@ -1,5 +1,5 @@
-from account import Conta
-from person import Pessoa
+from conta import Conta
+from pessoa import Pessoa
 
 conta = Conta(Pessoa('weliton', 'sousa', '1234'))
 conta2 = Conta(Pessoa('1111', 'so12usa', '12344'))
