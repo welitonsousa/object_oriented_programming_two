@@ -29,17 +29,17 @@ class Conta:
   def sacar(self, valor: float) -> bool:
     if valor <= self._saldo:
       self._saldo -= valor
-      self._historico.novo_historico('Saque\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor))
+      self._historico.nova_trasacao('Saque\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor))
       return True
     return False
 
   def depositar(self, valor: float) -> bool:
     self._saldo += valor
-    self._historico.novo_historico('Deposito\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor))
+    self._historico.nova_trasacao('Deposito\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor))
     return True
 
   def extrato(self) -> str:
-    self._historico.novo_historico('Extrato\nData: {}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M')))
+    self._historico.nova_trasacao('Extrato\nData: {}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M')))
     return 'Numero: {} \nSaldo: {}'.format(self._numero, self._saldo)
 
   def transferir(self, valor: float, destino) -> bool:

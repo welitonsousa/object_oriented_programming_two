@@ -3,6 +3,7 @@ from rotas import Rotas
 from conta import Conta
 from pessoa import Pessoa
 
+
 class Main(QMainWindow, Rotas):
     def __init__(self, parent=None):
         super(Main, self).__init__(parent)
@@ -18,6 +19,38 @@ class Main(QMainWindow, Rotas):
 
         self.tela_criar_conta.botao_cadastrar.clicked.connect(self.criar_conta)
         self.tela_criar_conta.botao_menu.clicked.connect(self.para_menu)
+        self.tela_login.botao_menu.clicked.connect(self.para_menu)
+        self.tela_login.botao_depositar.clicked.connect(self.botao_depositar)
+        self.tela_depositar.botao_depositar.clicked.connect(self.depositar)
+
+        self.conta_atual = None
+
+
+    def botao_depositar(self):
+        self.conta_atual = self.conta_existe()
+        if self.conta_atual != None:
+            self.para_depositar()
+        else:
+            self.mensagem('Erro', 'Conta não encontrada')
+
+    def depositar(self):
+        valor = self.tela_depositar.edit_valor.text()
+        if valor != '':
+            if Conta.depositar(self.conta_atual, float(valor)):
+                self.mensagem('Sucesso', 'Deposito realizado com sucesso')
+                self.tela_depositar.edit_valor.setText('')
+                self.para_login()
+            else:
+                self.mensagem('Erro', 'ALgo deu errado')
+
+
+
+    def conta_existe(self):
+        numero = self.tela_login.edit_numero_conta.text()
+        conta = Conta.busca_conta(numero)
+        if conta != None:
+            return conta
+        return None
 
     def cadastrar_cliente(self):
         nome = self.tela_cadastrar_cliente.edit_nome.text()
