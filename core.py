@@ -88,6 +88,7 @@ class Main(QMainWindow, Rotas):
     def botao_historico(self):
         self.conta_atual = self.conta_existe()
         if self.conta_atual != None:
+            self.tela_historico.lista_itens.clear()
             for operacao in Conta.historico(self.conta_atual):
                 self.tela_historico.lista_itens.addItem(operacao)
             self.para_historico()
