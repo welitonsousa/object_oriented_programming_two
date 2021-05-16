@@ -4,16 +4,29 @@ from conta import Conta
 from pessoa import Pessoa
 
 
+import socket
+ip = 'localhost'
+porta = 8000
+endereco = ((ip, porta))
+cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+cliente_socket.connect(endereco)
+
+
 class Main(QMainWindow, Rotas):
     def __init__(self, parent=None):
         super(Main, self).__init__(parent)
         self.setupUi(self)
+
+
+
+
         self.tela_menu.botao_login.clicked.connect(self.para_login)
         self.tela_menu.botao_criar_conta.clicked.connect(self.para_criar_conta)
         self.tela_menu.botao_cadastrar_cliente.clicked.connect(self.para_cadastrar_cliente)
+        
 
-        self.tela_menu.edit_numero_conta.setText(str(len(Conta.lista)))
-
+        self.tela_menu.edit_numero_conta.setText('0')
+        
         self.tela_cadastrar_cliente.botao_cadastrar.clicked.connect(self.cadastrar_cliente)
         self.tela_cadastrar_cliente.botao_menu.clicked.connect(self.para_menu)
 
@@ -41,6 +54,26 @@ class Main(QMainWindow, Rotas):
         self.tela_login.botao_historico.clicked.connect(self.botao_historico)
         self.tela_historico.botao_menu.clicked.connect(self.para_menu)
         self.conta_atual = None
+
+
+    def cadastrar_cliente(self):
+        nome = self.tela_cadastrar_cliente.edit_nome.text()
+        sobrenome = self.tela_cadastrar_cliente.edit_sobrenome.text()
+        cpf = self.tela_cadastrar_cliente.edit_cpf.text()
+
+        if nome != '' and sobrenome != '' and cpf != '':
+            
+            cliente_socket.send('cadastrar_cliente/{}/{}/{}/'.format(nome,sobrenome,cpf).encode())
+            retorno = cliente_socket.recv(1024).decode()
+
+
+            if retorno == 'cadastrado':    
+                self.mensagem('Sucesso', 'cadastrado com sucesso!')
+                self.tela_cadastrar_cliente.edit_nome.setText('')
+                self.tela_cadastrar_cliente.edit_sobrenome.setText('')
+                self.tela_cadastrar_cliente.edit_cpf.setText('')
+            else:
+                self.mensagem('Erro', 'CPF já cadastrado')
 
     def botao_extrato(self):
         self.conta_atual = self.conta_existe()
@@ -126,19 +159,7 @@ class Main(QMainWindow, Rotas):
             return conta
         return None
 
-    def cadastrar_cliente(self):
-        nome = self.tela_cadastrar_cliente.edit_nome.text()
-        sobrenome = self.tela_cadastrar_cliente.edit_sobrenome.text()
-        cpf = self.tela_cadastrar_cliente.edit_cpf.text()
-
-        if nome != '' and sobrenome != '' and cpf != '':
-            if Pessoa.cadastrar(nome, sobrenome, cpf):
-                self.mensagem('Sucesso', 'cadastrado com sucesso!')
-                self.tela_cadastrar_cliente.edit_nome.setText('')
-                self.tela_cadastrar_cliente.edit_sobrenome.setText('')
-                self.tela_cadastrar_cliente.edit_cpf.setText('')
-            else:
-                self.mensagem('Erro', 'CPF já cadastrado')
+    
 
     def criar_conta(self):
         cpf = self.tela_criar_conta.edit_cpf.text()
