@@ -128,26 +128,18 @@ class Main(QMainWindow, Rotas):
         else:
             self.mensagem('Erro', 'Conta não encontrada')
 
-    def tranferir(self):
-        valor = self.tela_transferir.edit_valor.text()
-        destinatario = self.tela_transferir.edit_conta_Destinatario.text()
-        if destinatario != '' and valor != '':
-            conta_destino = Conta.busca_conta(destinatario)
-            if conta_destino != None:
-                if Conta.transferir(self.conta_atual, float(valor), conta_destino):
-                    self.mensagem('Sucesso', 'Transferiancia realizada com sucesso')
-                    self.para_login()
-                else:
-                    self.mensagem('Erro', 'Algo deu errado')
-            else:
-                self.mensagem('Erro', 'Conta não encontrada')
-
     def botao_transferir(self):
-        self.conta_atual = self.conta_existe()
-        if self.conta_atual != None:
+        numero = self.tela_login.edit_numero_conta.text()
+        cliente_socket.send('conta_existe/{}/'.format(numero).encode())
+        retorno = cliente_socket.recv(1024).decode()
+        if retorno == 'True':
             self.para_transferir()
         else:
             self.mensagem('Erro', 'Conta não encontrada')
+
+    
+
+   
 
     
 
@@ -181,6 +173,18 @@ class Main(QMainWindow, Rotas):
             if retorno == 'True':
                 self.mensagem('Sucesso', 'Saque realizado com sucesso')
                 self.tela_sacar.edit_valor.setText('')
+                self.para_login()
+            else:
+                self.mensagem('Erro', 'Algo deu errado')
+
+    def tranferir(self):
+        valor = self.tela_transferir.edit_valor.text()
+        destinatario = self.tela_transferir.edit_conta_Destinatario.text()
+        if destinatario != '' and valor != '':
+            cliente_socket.send('transferir/{}/{}/'.format(valor, destinatario).encode())
+            retorno = cliente_socket.recv(1024).decode()
+            if retorno == 'True':
+                self.mensagem('Sucesso', 'Transferencia realizada com sucesso')
                 self.para_login()
             else:
                 self.mensagem('Erro', 'Algo deu errado')

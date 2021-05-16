@@ -28,7 +28,6 @@ def stringEmArray(valor: str) -> list:
 
 
 def conta_existe(numero_conta: str):
-    print('asd')
     conta = Conta.busca_conta(numero_conta)
     if conta != None:
         return conta
@@ -82,4 +81,14 @@ while(True):
         retorno = str(Conta.sacar(conta_atual, float(valor_saque)))
         conta_atual = None
         conexao.send(retorno.encode())
+
+      if(valores[0] == 'transferir'):
+        valor = valores[1]
+        conta_destino = conta_existe(valores[2])
+        if(conta_destino == None):
+          conexao.send('False'.encode())
+        else:
+          retorno = str(Conta.transferir(conta_atual, float(valor), conta_destino))
+          conta_atual = None
+          conexao.send(retorno.encode())
       
