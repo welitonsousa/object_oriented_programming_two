@@ -3,7 +3,7 @@ from pessoa import Pessoa
 from conta import Conta
 
 ip = 'localhost'
-porta = 8003
+porta = 8004
 endereco = ((ip, porta))
 servidor_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 servidor_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -91,4 +91,11 @@ while(True):
           retorno = str(Conta.transferir(conta_atual, float(valor), conta_destino))
           conta_atual = None
           conexao.send(retorno.encode())
+
+      if(valores[0] == 'extrato'):
+        data_abertura = conta_atual._data_abertura.replace('/','-')
+        saldo = conta_atual._saldo
+        retorno = str('{}/{}/'.format(data_abertura,saldo))
+        conta_atual = None
+        conexao.send(retorno.encode())
       

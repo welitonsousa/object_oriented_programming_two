@@ -6,7 +6,7 @@ from pessoa import Pessoa
 
 import socket
 ip = 'localhost'
-porta = 8003
+porta = 8004
 endereco = ((ip, porta))
 cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cliente_socket.connect(endereco)
@@ -47,6 +47,7 @@ class Main(QMainWindow, Rotas):
         self.tela_login.botao_menu.clicked.connect(self.para_menu)
         self.tela_login.botao_depositar.clicked.connect(self.botao_depositar)
         self.tela_login.botao_sacar.clicked.connect(self.botao_sacar)
+        
         self.tela_login.botao_extrato.clicked.connect(self.botao_extrato)
 
         self.tela_depositar.botao_depositar.clicked.connect(self.depositar)
@@ -103,8 +104,10 @@ class Main(QMainWindow, Rotas):
                 self.mensagem('Erro', 'CPF não encontrado')
 
     def botao_extrato(self):
-        self.conta_atual = self.conta_existe()
-        if self.conta_atual != None:
+        numero = self.tela_login.edit_numero_conta.text()
+        cliente_socket.send('conta_existe/{}/'.format(numero).encode())
+        retorno = cliente_socket.recv(1024).decode()
+        if retorno == 'True':
             self.extrato()
             self.para_extrato()
         else:
@@ -190,8 +193,15 @@ class Main(QMainWindow, Rotas):
                 self.mensagem('Erro', 'Algo deu errado')
 
     def extrato(self):
-        self.tela_extrato.edit_conta_aberta.setText(self.conta_atual.data_abertura)
-        self.tela_extrato.edit_saldo.setText(str(self.conta_atual.saldo))
+        cliente_socket.send('extrato/'.encode())
+        retorno = cliente_socket.recv(1024).decode()
+        # print(retorno)
+        retorno = stringEmArray(retorno)
+        # print(retorno[0])
+        data_abertura = retorno[0]
+        saldo = retorno[1]
+        self.tela_extrato.edit_conta_aberta.setText(data_abertura)
+        self.tela_extrato.edit_saldo.setText(saldo)
 
 
 
