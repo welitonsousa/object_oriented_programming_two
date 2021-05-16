@@ -6,10 +6,21 @@ from pessoa import Pessoa
 
 import socket
 ip = 'localhost'
-porta = 8000
+porta = 8002
 endereco = ((ip, porta))
 cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cliente_socket.connect(endereco)
+
+def stringEmArray(valor: str) -> list:
+    valores = []
+    string = ''
+    for caractere in valor:
+        if caractere != '/':
+            string += caractere
+        else:
+            valores.append(string)
+            string = ''
+    return valores
 
 
 class Main(QMainWindow, Rotas):
@@ -67,13 +78,29 @@ class Main(QMainWindow, Rotas):
             retorno = cliente_socket.recv(1024).decode()
 
 
-            if retorno == 'cadastrado':    
+            if retorno == 'True':    
                 self.mensagem('Sucesso', 'cadastrado com sucesso!')
                 self.tela_cadastrar_cliente.edit_nome.setText('')
                 self.tela_cadastrar_cliente.edit_sobrenome.setText('')
                 self.tela_cadastrar_cliente.edit_cpf.setText('')
             else:
                 self.mensagem('Erro', 'CPF já cadastrado')
+
+    def criar_conta(self):
+        cpf = self.tela_criar_conta.edit_cpf.text()
+        if cpf != '':
+            cliente_socket.send('criar_conta/{}/'.format(cpf).encode())
+            retorno = cliente_socket.recv(1024).decode()
+            retorno = stringEmArray(retorno)
+            if retorno[0] == 'True':
+                numero = 'numero da conta: ' + retorno[1]
+                self.mensagem('Sucesso', numero)
+                self.tela_criar_conta.edit_cpf.setText('')
+                cliente_socket.send('total_contas/'.encode())
+                total_contas = cliente_socket.recv(1024).decode()
+                self.tela_menu.edit_numero_conta.setText(total_contas)
+            else:
+                self.mensagem('Erro', 'CPF não encontrado')
 
     def botao_extrato(self):
         self.conta_atual = self.conta_existe()
@@ -161,18 +188,7 @@ class Main(QMainWindow, Rotas):
 
     
 
-    def criar_conta(self):
-        cpf = self.tela_criar_conta.edit_cpf.text()
-        if cpf != '':
-            pessoa = Pessoa.busca_pessoa(cpf)
-            if pessoa != None:
-                numero = 'numero da conta: ' + str(Conta.criar_conta(pessoa))
-                
-                self.mensagem('Sucesso', numero)
-                self.tela_criar_conta.edit_cpf.setText('')
-                self.tela_menu.edit_numero_conta.setText(str(len(Conta.lista)))
-            else:
-                self.mensagem('Erro', 'CPF não encontrado')
+    
             
     def mensagem(self, titulo: str, mensagem: str):
         QMessageBox.information(None, titulo, mensagem)
