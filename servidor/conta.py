@@ -43,6 +43,7 @@ class Conta:
     return False
 
   def depositar(self, valor: float) -> bool:
+    print(self)
     self._saldo += valor
     self._historico.nova_trasacao('Deposito\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor))
     return True

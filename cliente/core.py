@@ -111,8 +111,10 @@ class Main(QMainWindow, Rotas):
             self.mensagem('Erro', 'Conta não encontrada')
 
     def botao_depositar(self):
-        self.conta_atual = self.conta_existe()
-        if self.conta_atual != None:
+        numero = self.tela_login.edit_numero_conta.text()
+        cliente_socket.send('conta_existe/{}/'.format(numero).encode())
+        retorno = cliente_socket.recv(1024).decode()
+        if retorno == 'True':
             self.para_depositar()
         else:
             self.mensagem('Erro', 'Conta não encontrada')
@@ -158,7 +160,10 @@ class Main(QMainWindow, Rotas):
     def depositar(self):
         valor = self.tela_depositar.edit_valor.text()
         if valor != '':
-            if Conta.depositar(self.conta_atual, float(valor)):
+            cliente_socket.send('depositar/{}/'.format(valor).encode())
+            retorno = cliente_socket.recv(1024).decode()
+            print(retorno)
+            if retorno == 'True':
                 self.mensagem('Sucesso', 'Deposito realizado com sucesso')
                 self.tela_depositar.edit_valor.setText('')
                 self.para_login()
@@ -179,6 +184,13 @@ class Main(QMainWindow, Rotas):
         self.tela_extrato.edit_conta_aberta.setText(self.conta_atual.data_abertura)
         self.tela_extrato.edit_saldo.setText(str(self.conta_atual.saldo))
 
+
+
+
+
+
+
+    #apagar quando acabar
     def conta_existe(self):
         numero = self.tela_login.edit_numero_conta.text()
         conta = Conta.busca_conta(numero)

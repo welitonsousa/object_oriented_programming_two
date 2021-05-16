@@ -11,6 +11,7 @@ servidor_socket.bind(endereco)
 servidor_socket.listen(1)
 conexao, cliente = servidor_socket.accept()
 
+conta_atual = None
 
 print('conectado')
 
@@ -24,6 +25,15 @@ def stringEmArray(valor: str) -> list:
       valores.append(string)
       string = ''
   return valores
+
+
+def conta_existe(numero_conta: str):
+    print('asd')
+    conta = Conta.busca_conta(numero_conta)
+    if conta != None:
+        return conta
+    return None
+
 
 while(True):
     mensagem_recebida = conexao.recv(1024).decode()    
@@ -52,4 +62,27 @@ while(True):
 
       if(valores[0] == 'total_contas'):
         conexao.send(str(len(Conta.lista)).encode())
-        
+
+
+
+
+
+      
+
+      if(valores[0] == 'conta_existe'):
+        numero_conta = valores[1]
+        conta_atual = conta_existe(numero_conta)
+        if conta_atual == None:
+          conexao.send('False'.encode())
+        else:
+          conexao.send('True'.encode())
+
+      if(valores[0] == 'depositar'):
+        valor_deposito = valores[1]
+        print(conta_atual)
+        print(conta_atual._saldo)
+        retorno = str(Conta.depositar(conta_atual, float(valor_deposito)))
+        print(retorno)
+        conta_atual = None
+        conexao.send(retorno.encode())
+      
