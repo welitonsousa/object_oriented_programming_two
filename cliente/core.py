@@ -6,7 +6,7 @@ from pessoa import Pessoa
 
 import socket
 ip = 'localhost'
-porta = 8002
+porta = 8003
 endereco = ((ip, porta))
 cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cliente_socket.connect(endereco)
@@ -119,6 +119,15 @@ class Main(QMainWindow, Rotas):
         else:
             self.mensagem('Erro', 'Conta não encontrada')
 
+    def botao_sacar(self):
+        numero = self.tela_login.edit_numero_conta.text()
+        cliente_socket.send('conta_existe/{}/'.format(numero).encode())
+        retorno = cliente_socket.recv(1024).decode()
+        if retorno == 'True':
+            self.para_sacar()
+        else:
+            self.mensagem('Erro', 'Conta não encontrada')
+
     def tranferir(self):
         valor = self.tela_transferir.edit_valor.text()
         destinatario = self.tela_transferir.edit_conta_Destinatario.text()
@@ -140,12 +149,7 @@ class Main(QMainWindow, Rotas):
         else:
             self.mensagem('Erro', 'Conta não encontrada')
 
-    def botao_sacar(self):
-        self.conta_atual = self.conta_existe()
-        if self.conta_atual != None:
-            self.para_sacar()
-        else:
-            self.mensagem('Erro', 'Conta não encontrada')
+    
 
     def botao_historico(self):
         self.conta_atual = self.conta_existe()
@@ -162,7 +166,6 @@ class Main(QMainWindow, Rotas):
         if valor != '':
             cliente_socket.send('depositar/{}/'.format(valor).encode())
             retorno = cliente_socket.recv(1024).decode()
-            print(retorno)
             if retorno == 'True':
                 self.mensagem('Sucesso', 'Deposito realizado com sucesso')
                 self.tela_depositar.edit_valor.setText('')
@@ -173,7 +176,9 @@ class Main(QMainWindow, Rotas):
     def sacar(self):
         valor = self.tela_sacar.edit_valor.text()
         if valor != '':
-            if Conta.sacar(self.conta_atual, float(valor)):
+            cliente_socket.send('sacar/{}/'.format(valor).encode())
+            retorno = cliente_socket.recv(1024).decode()
+            if retorno == 'True':
                 self.mensagem('Sucesso', 'Saque realizado com sucesso')
                 self.tela_sacar.edit_valor.setText('')
                 self.para_login()

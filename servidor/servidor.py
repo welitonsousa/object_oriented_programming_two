@@ -3,7 +3,7 @@ from pessoa import Pessoa
 from conta import Conta
 
 ip = 'localhost'
-porta = 8002
+porta = 8003
 endereco = ((ip, porta))
 servidor_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 servidor_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -63,12 +63,6 @@ while(True):
       if(valores[0] == 'total_contas'):
         conexao.send(str(len(Conta.lista)).encode())
 
-
-
-
-
-      
-
       if(valores[0] == 'conta_existe'):
         numero_conta = valores[1]
         conta_atual = conta_existe(numero_conta)
@@ -79,10 +73,13 @@ while(True):
 
       if(valores[0] == 'depositar'):
         valor_deposito = valores[1]
-        print(conta_atual)
-        print(conta_atual._saldo)
         retorno = str(Conta.depositar(conta_atual, float(valor_deposito)))
-        print(retorno)
+        conta_atual = None
+        conexao.send(retorno.encode())
+
+      if(valores[0] == 'sacar'):
+        valor_saque = valores[1]
+        retorno = str(Conta.sacar(conta_atual, float(valor_saque)))
         conta_atual = None
         conexao.send(retorno.encode())
       
