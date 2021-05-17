@@ -34,7 +34,6 @@ class Main(QMainWindow, Rotas):
         self.tela_menu.botao_login.clicked.connect(self.para_login)
         self.tela_menu.botao_criar_conta.clicked.connect(self.para_criar_conta)
         self.tela_menu.botao_cadastrar_cliente.clicked.connect(self.para_cadastrar_cliente)
-        
 
         self.tela_menu.edit_numero_conta.setText('0')
         
@@ -74,11 +73,8 @@ class Main(QMainWindow, Rotas):
         cpf = self.tela_cadastrar_cliente.edit_cpf.text()
 
         if nome != '' and sobrenome != '' and cpf != '':
-            
             cliente_socket.send('cadastrar_cliente/{}/{}/{}/'.format(nome,sobrenome,cpf).encode())
             retorno = cliente_socket.recv(1024).decode()
-
-
             if retorno == 'True':    
                 self.mensagem('Sucesso', 'cadastrado com sucesso!')
                 self.tela_cadastrar_cliente.edit_nome.setText('')
@@ -140,17 +136,17 @@ class Main(QMainWindow, Rotas):
         else:
             self.mensagem('Erro', 'Conta não encontrada')
 
-    
-
-   
-
-    
-
     def botao_historico(self):
-        self.conta_atual = self.conta_existe()
-        if self.conta_atual != None:
+        numero = self.tela_login.edit_numero_conta.text()
+        cliente_socket.send('conta_existe/{}/'.format(numero).encode())
+        retorno = cliente_socket.recv(1024).decode()
+        if retorno == 'True':
+            cliente_socket.send('historico/'.encode())
+            retorno = cliente_socket.recv(1024).decode()
+
             self.tela_historico.lista_itens.clear()
-            for operacao in Conta.historico(self.conta_atual):
+            items = stringEmArray(retorno)
+            for operacao in items:
                 self.tela_historico.lista_itens.addItem(operacao)
             self.para_historico()
         else:

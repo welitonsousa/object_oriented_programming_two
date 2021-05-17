@@ -99,3 +99,13 @@ while(True):
         conta_atual = None
         conexao.send(retorno.encode())
       
+      if(valores[0] == 'historico'):
+        historico = Conta.historico(conta_atual)
+        print(historico)
+        retorno = ''
+        for i in historico:
+          i = i.replace('/', '-')
+          retorno += '{}/'.format(i)
+        print(retorno)
+        conta_atual = None
+        conexao.send(retorno.encode())
