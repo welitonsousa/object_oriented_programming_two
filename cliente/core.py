@@ -1,7 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
 from rotas import Rotas
-from conta import Conta
-from pessoa import Pessoa
 
 
 import socket
@@ -27,9 +25,6 @@ class Main(QMainWindow, Rotas):
     def __init__(self, parent=None):
         super(Main, self).__init__(parent)
         self.setupUi(self)
-
-
-
 
         self.tela_menu.botao_login.clicked.connect(self.para_login)
         self.tela_menu.botao_criar_conta.clicked.connect(self.para_criar_conta)
@@ -191,31 +186,11 @@ class Main(QMainWindow, Rotas):
     def extrato(self):
         cliente_socket.send('extrato/'.encode())
         retorno = cliente_socket.recv(1024).decode()
-        # print(retorno)
         retorno = stringEmArray(retorno)
-        # print(retorno[0])
         data_abertura = retorno[0]
         saldo = retorno[1]
         self.tela_extrato.edit_conta_aberta.setText(data_abertura)
         self.tela_extrato.edit_saldo.setText(saldo)
-
-
-
-
-
-
-
-    #apagar quando acabar
-    def conta_existe(self):
-        numero = self.tela_login.edit_numero_conta.text()
-        conta = Conta.busca_conta(numero)
-        if conta != None:
-            return conta
-        return None
-
-    
-
-    
             
     def mensagem(self, titulo: str, mensagem: str):
         QMessageBox.information(None, titulo, mensagem)

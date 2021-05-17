@@ -36,6 +36,10 @@ def conta_existe(numero_conta: str):
 
 while(True):
     mensagem_recebida = conexao.recv(1024).decode()    
+    if mensagem_recebida == '':
+      conexao.close()
+      break
+    
     print('cliente: ' + mensagem_recebida)
     
     if mensagem_recebida != '':
@@ -73,13 +77,11 @@ while(True):
       if(valores[0] == 'depositar'):
         valor_deposito = valores[1]
         retorno = str(Conta.depositar(conta_atual, float(valor_deposito)))
-        conta_atual = None
         conexao.send(retorno.encode())
 
       if(valores[0] == 'sacar'):
         valor_saque = valores[1]
         retorno = str(Conta.sacar(conta_atual, float(valor_saque)))
-        conta_atual = None
         conexao.send(retorno.encode())
 
       if(valores[0] == 'transferir'):
@@ -89,23 +91,18 @@ while(True):
           conexao.send('False'.encode())
         else:
           retorno = str(Conta.transferir(conta_atual, float(valor), conta_destino))
-          conta_atual = None
           conexao.send(retorno.encode())
 
       if(valores[0] == 'extrato'):
         data_abertura = conta_atual._data_abertura.replace('/','-')
         saldo = conta_atual._saldo
         retorno = str('{}/{}/'.format(data_abertura,saldo))
-        conta_atual = None
         conexao.send(retorno.encode())
       
       if(valores[0] == 'historico'):
         historico = Conta.historico(conta_atual)
-        print(historico)
         retorno = ''
         for i in historico:
           i = i.replace('/', '-')
           retorno += '{}/'.format(i)
-        print(retorno)
-        conta_atual = None
         conexao.send(retorno.encode())
