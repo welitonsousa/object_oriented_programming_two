@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module servidor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>servidor</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/darice/Documentos/Estudos/UFPI/2021.1/POO%20II/object_oriented_programming_two/servidor/servidor.py">/home/darice/Documentos/Estudos/UFPI/2021.1/POO II/object_oriented_programming_two/servidor/servidor.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="socket.html">socket</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-conta_existe"><strong>conta_existe</strong></a>(numero_conta: str)</dt><dd><tt>&nbsp;verifica&nbsp;se&nbsp;o&nbsp;numero&nbsp;da&nbsp;conta&nbsp;digitada&nbsp;pertence&nbsp;a&nbsp;uma&nbsp;conta<br>
+:param&nbsp;numero_conta:&nbsp;str<br>
+&nbsp;&nbsp;numero&nbsp;da&nbsp;conta&nbsp;que&nbsp;vai&nbsp;buscar<br>
+:return:<br>
+&nbsp;&nbsp;objeto&nbsp;conta&nbsp;-&gt;&nbsp;Se&nbsp;a&nbsp;conta&nbsp;com&nbsp;tal&nbsp;número&nbsp;existir<br>
+&nbsp;&nbsp;None&nbsp;-&gt;&nbsp;Se&nbsp;não&nbsp;existir</tt></dd></dl>
+ <dl><dt><a name="-stringEmArray"><strong>stringEmArray</strong></a>(valor: str) -&gt; list</dt><dd><tt>converte&nbsp;uma&nbsp;string&nbsp;em&nbsp;array.&nbsp;Cada&nbsp;'/'&nbsp;indica&nbsp;o&nbsp;final&nbsp;de&nbsp;um&nbsp;endereco&nbsp;de&nbsp;memoria.<br>
+Utilizada&nbsp;para&nbsp;receber&nbsp;uma&nbsp;resposta&nbsp;do&nbsp;cliente&nbsp;através&nbsp;de&nbsp;uma&nbsp;string<br>
+O&nbsp;primeiro&nbsp;endereco&nbsp;de&nbsp;memoria&nbsp;da&nbsp;lista&nbsp;deve&nbsp;ser&nbsp;sempre&nbsp;o&nbsp;comando&nbsp;requerido&nbsp;pelo&nbsp;cliente<br>
+:param&nbsp;valor:&nbsp;str<br>
+&nbsp;&nbsp;string&nbsp;recebida&nbsp;para&nbsp;conversão<br>
+:return:&nbsp;list<br>
+&nbsp;&nbsp;retorna&nbsp;uma&nbsp;lista&nbsp;da&nbsp;string&nbsp;recebida</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>cliente</strong> = ('127.0.0.1', 53936)<br>
+<strong>conexao</strong> = &lt;socket.socket [closed] fd=-1, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=0&gt;<br>
+<strong>conta_atual</strong> = None<br>
+<strong>endereco</strong> = ('localhost', 8004)<br>
+<strong>ip</strong> = 'localhost'<br>
+<strong>mensagem_recebida</strong> = ''<br>
+<strong>porta</strong> = 8004<br>
+<strong>servidor_socket</strong> = &lt;socket.socket fd=3, family=AddressFamily.AF_INE....SOCK_STREAM, proto=0, laddr=('127.0.0.1', 8004)&gt;</td></tr></table>
+</body></html>

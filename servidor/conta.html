@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module conta</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>conta</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/darice/Documentos/Estudos/UFPI/2021.1/POO%20II/object_oriented_programming_two/servidor/conta.py">/home/darice/Documentos/Estudos/UFPI/2021.1/POO II/object_oriented_programming_two/servidor/conta.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="uuid.html">uuid</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="conta.html#Conta">Conta</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Conta">class <strong>Conta</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Conta">Conta</a>(titular:&nbsp;pessoa.Pessoa)<br>
+&nbsp;<br>
+recebe&nbsp;um&nbsp;titular,&nbsp;que&nbsp;é&nbsp;um&nbsp;objeto&nbsp;da&nbsp;classe&nbsp;Pessoa.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Conta-__init__"><strong>__init__</strong></a>(self, titular: pessoa.Pessoa)</dt><dd><tt>:param&nbsp;titular:&nbsp;objeto&nbsp;da&nbsp;classe&nbsp;Pessoa<br>
+&nbsp;&nbsp;titular&nbsp;da&nbsp;conta<br>
+:param&nbsp;saldo:&nbsp;float<br>
+&nbsp;&nbsp;saldo&nbsp;da&nbsp;conta<br>
+:param&nbsp;historico:&nbsp;classe&nbsp;Historico<br>
+&nbsp;&nbsp;historico&nbsp;de&nbsp;transações&nbsp;da&nbsp;conta<br>
+:param&nbsp;data_abertura:&nbsp;str<br>
+&nbsp;&nbsp;data&nbsp;em&nbsp;que&nbsp;a&nbsp;conta&nbsp;foi&nbsp;criada<br>
+:param&nbsp;numero:&nbsp;str<br>
+&nbsp;&nbsp;id&nbsp;único&nbsp;que&nbsp;representa&nbsp;o&nbsp;numero&nbsp;da&nbsp;conta<br>
+:return:&nbsp;não&nbsp;retorna&nbsp;nada</tt></dd></dl>
+
+<dl><dt><a name="Conta-busca_conta"><strong>busca_conta</strong></a>(numero_buscar: str)</dt><dd><tt>verifica&nbsp;se&nbsp;o&nbsp;numero&nbsp;da&nbsp;conta&nbsp;digitada&nbsp;pertence&nbsp;a&nbsp;uma&nbsp;conta<br>
+:param&nbsp;numero_buscar:&nbsp;str<br>
+&nbsp;&nbsp;numero&nbsp;da&nbsp;conta&nbsp;que&nbsp;vai&nbsp;buscar<br>
+:return:<br>
+&nbsp;&nbsp;objeto&nbsp;conta&nbsp;-&gt;&nbsp;Se&nbsp;a&nbsp;conta&nbsp;com&nbsp;tal&nbsp;número&nbsp;existir<br>
+&nbsp;&nbsp;None&nbsp;-&gt;&nbsp;Se&nbsp;não&nbsp;existir</tt></dd></dl>
+
+<dl><dt><a name="Conta-criar_conta"><strong>criar_conta</strong></a>(pessoa: pessoa.Pessoa)</dt><dd><tt>Cria&nbsp;a&nbsp;conta,&nbsp;que&nbsp;é&nbsp;uma&nbsp;instancia&nbsp;da&nbsp;classe&nbsp;pessoa.<br>
+Adiciona&nbsp;a&nbsp;conta&nbsp;na&nbsp;variavel&nbsp;list<br>
+:param&nbsp;pessoa:&nbsp;Objeto&nbsp;da&nbsp;classe&nbsp;pessoa<br>
+&nbsp;&nbsp;O&nbsp;titular&nbsp;da&nbsp;conta<br>
+:return:&nbsp;str<br>
+&nbsp;&nbsp;O&nbsp;numero&nbsp;da&nbsp;conta</tt></dd></dl>
+
+<dl><dt><a name="Conta-depositar"><strong>depositar</strong></a>(self, valor: float) -&gt; bool</dt><dd><tt>deposita&nbsp;um&nbsp;dinheiro&nbsp;em&nbsp;determinada&nbsp;conta<br>
+:param&nbsp;self:&nbsp;objeto&nbsp;conta<br>
+&nbsp;&nbsp;conta&nbsp;que&nbsp;receberá&nbsp;o&nbsp;deposito<br>
+:param&nbsp;valor:&nbsp;<br>
+&nbsp;&nbsp;valor&nbsp;do&nbsp;deposito<br>
+:return:&nbsp;bool<br>
+&nbsp;&nbsp;returna&nbsp;True</tt></dd></dl>
+
+<dl><dt><a name="Conta-extrato"><strong>extrato</strong></a>(self) -&gt; str</dt><dd><tt>:param&nbsp;self:&nbsp;objeto&nbsp;conta<br>
+&nbsp;&nbsp;conta&nbsp;para&nbsp;tirar&nbsp;o&nbsp;extrato<br>
+:return:&nbsp;str<br>
+&nbsp;&nbsp;string&nbsp;contem&nbsp;o&nbsp;numero&nbsp;da&nbsp;conta&nbsp;e&nbsp;o&nbsp;saldo&nbsp;atual</tt></dd></dl>
+
+<dl><dt><a name="Conta-historico"><strong>historico</strong></a>(self) -&gt; list</dt><dd><tt>:param&nbsp;self:&nbsp;objeto&nbsp;conta<br>
+&nbsp;&nbsp;conta&nbsp;da&nbsp;qual&nbsp;vai&nbsp;ser&nbsp;impresso&nbsp;o&nbsp;historico<br>
+:return:&nbsp;list<br>
+&nbsp;&nbsp;returna&nbsp;uma&nbsp;lista&nbsp;com&nbsp;as&nbsp;transações</tt></dd></dl>
+
+<dl><dt><a name="Conta-sacar"><strong>sacar</strong></a>(self, valor: float) -&gt; bool</dt><dd><tt>saca&nbsp;um&nbsp;dinheiro&nbsp;de&nbsp;determinada&nbsp;conta<br>
+:param&nbsp;self:&nbsp;objeto&nbsp;conta<br>
+&nbsp;&nbsp;conta&nbsp;que&nbsp;realizará&nbsp;o&nbsp;saque<br>
+:param&nbsp;valor:&nbsp;<br>
+&nbsp;&nbsp;valor&nbsp;do&nbsp;saque<br>
+:raise:<br>
+&nbsp;&nbsp;nao&nbsp;aceita&nbsp;sacar&nbsp;um&nbsp;valor&nbsp;maior&nbsp;que&nbsp;o&nbsp;saldo&nbsp;da&nbsp;conta<br>
+:return:&nbsp;bool<br>
+&nbsp;&nbsp;True&nbsp;-&gt;&nbsp;se&nbsp;o&nbsp;saque&nbsp;foi&nbsp;realizado<br>
+&nbsp;&nbsp;False&nbsp;-&gt;&nbsp;se&nbsp;o&nbsp;saque&nbsp;não&nbsp;foi&nbsp;realizado</tt></dd></dl>
+
+<dl><dt><a name="Conta-transferir"><strong>transferir</strong></a>(self, valor: float, destino) -&gt; bool</dt><dd><tt>transfere&nbsp;um&nbsp;valor&nbsp;de&nbsp;uma&nbsp;conta&nbsp;para&nbsp;outra<br>
+:param&nbsp;self:&nbsp;objeto&nbsp;conta<br>
+&nbsp;&nbsp;conta&nbsp;que&nbsp;enviará&nbsp;o&nbsp;deposito<br>
+:param&nbsp;valor:&nbsp;float<br>
+&nbsp;&nbsp;valor&nbsp;da&nbsp;transferencia<br>
+:param&nbsp;destino:&nbsp;objeto&nbsp;conta<br>
+&nbsp;&nbsp;conta&nbsp;que&nbsp;receberá&nbsp;o&nbsp;deposito<br>
+:raise:<br>
+&nbsp;&nbsp;nao&nbsp;aceita&nbsp;transferir&nbsp;um&nbsp;valor&nbsp;maior&nbsp;que&nbsp;o&nbsp;saldo&nbsp;da&nbsp;conta&nbsp;do&nbsp;remetente<br>
+:return:&nbsp;bool<br>
+&nbsp;&nbsp;True&nbsp;-&gt;&nbsp;transferencia&nbsp;realizada<br>
+&nbsp;&nbsp;False&nbsp;-&gt;&nbsp;transferencia&nbsp;não&nbsp;realizada</tt></dd></dl>
+
+<hr>
+Readonly properties defined here:<br>
+<dl><dt><strong>data_abertura</strong></dt>
+</dl>
+<dl><dt><strong>saldo</strong></dt>
+</dl>
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>lista</strong> = []</dl>
+
+</td></tr></table></td></tr></table>
+</body></html>

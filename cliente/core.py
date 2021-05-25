@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
 from rotas import Rotas
 
-
+'''realiza a conexao com o servidor'''
 import socket
 ip = 'localhost'
 porta = 8004
@@ -10,6 +10,14 @@ cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cliente_socket.connect(endereco)
 
 def stringEmArray(valor: str) -> list:
+    '''
+    converte uma string em array. Cada '/' indica o final de um endereco de memoria.
+    Utilizada para receber uma resposta do servidor através de uma string
+    :param valor: str
+      string recebida para conversão
+    :return: list
+      retorna uma lista da string recebida
+  '''
     valores = []
     string = ''
     for caractere in valor:
@@ -22,6 +30,9 @@ def stringEmArray(valor: str) -> list:
 
 
 class Main(QMainWindow, Rotas):
+    '''
+    define os metodos a serem chamados quando clicar nos botoes
+    '''
     def __init__(self, parent=None):
         super(Main, self).__init__(parent)
         self.setupUi(self)
@@ -63,6 +74,11 @@ class Main(QMainWindow, Rotas):
 
 
     def cadastrar_cliente(self):
+        """
+        cadastra um cliente.
+        Envia o nome, o sobrenome e o cpf para o servidor
+        Imprime uma mensagem na tela informando se a conta foi criada ou se o CPF já estava cadastrado
+        """
         nome = self.tela_cadastrar_cliente.edit_nome.text()
         sobrenome = self.tela_cadastrar_cliente.edit_sobrenome.text()
         cpf = self.tela_cadastrar_cliente.edit_cpf.text()
@@ -79,6 +95,11 @@ class Main(QMainWindow, Rotas):
                 self.mensagem('Erro', 'CPF já cadastrado')
 
     def criar_conta(self):
+        """
+        cria uma conta
+        Envia o cpf para o servidor
+        Imprime uma mensagem na tela informando o numero da conta criada ou se o cpf nao foi encontrado, e assim, a conta nao foi criada
+        """
         cpf = self.tela_criar_conta.edit_cpf.text()
         if cpf != '':
             cliente_socket.send('criar_conta/{}/'.format(cpf).encode())
@@ -95,6 +116,12 @@ class Main(QMainWindow, Rotas):
                 self.mensagem('Erro', 'CPF não encontrado')
 
     def botao_extrato(self):
+        """
+        Envia o numero da conta para o servidor
+        recebe a informação do servidor se a conta existe
+        se existir, chama o metodo extrato
+        se não existir, informa ao usuario
+        """
         numero = self.tela_login.edit_numero_conta.text()
         cliente_socket.send('conta_existe/{}/'.format(numero).encode())
         retorno = cliente_socket.recv(1024).decode()
@@ -105,6 +132,12 @@ class Main(QMainWindow, Rotas):
             self.mensagem('Erro', 'Conta não encontrada')
 
     def botao_depositar(self):
+        """
+        Envia o numero da conta para o servidor
+        recebe a informação do servidor se a conta existe
+        se existir, chama o metodo depositar
+        se não existir, informa ao usuario
+        """
         numero = self.tela_login.edit_numero_conta.text()
         cliente_socket.send('conta_existe/{}/'.format(numero).encode())
         retorno = cliente_socket.recv(1024).decode()
@@ -114,6 +147,12 @@ class Main(QMainWindow, Rotas):
             self.mensagem('Erro', 'Conta não encontrada')
 
     def botao_sacar(self):
+        """
+        Envia o numero da conta para o servidor
+        recebe a informação do servidor se a conta existe
+        se existir, chama o metodo sacar
+        se não existir, informa ao usuario
+        """
         numero = self.tela_login.edit_numero_conta.text()
         cliente_socket.send('conta_existe/{}/'.format(numero).encode())
         retorno = cliente_socket.recv(1024).decode()
@@ -123,6 +162,12 @@ class Main(QMainWindow, Rotas):
             self.mensagem('Erro', 'Conta não encontrada')
 
     def botao_transferir(self):
+        """
+        Envia o numero da conta para o servidor
+        recebe a informação do servidor se a conta existe
+        se existir, chama o metodo transferir
+        se não existir, informa ao usuario
+        """
         numero = self.tela_login.edit_numero_conta.text()
         cliente_socket.send('conta_existe/{}/'.format(numero).encode())
         retorno = cliente_socket.recv(1024).decode()
@@ -132,6 +177,12 @@ class Main(QMainWindow, Rotas):
             self.mensagem('Erro', 'Conta não encontrada')
 
     def botao_historico(self):
+        """
+        Envia o numero da conta para o servidor
+        recebe a informação do servidor se a conta existe
+        se existir, chama o metodo historico
+        se não existir, informa ao usuario
+        """
         numero = self.tela_login.edit_numero_conta.text()
         cliente_socket.send('conta_existe/{}/'.format(numero).encode())
         retorno = cliente_socket.recv(1024).decode()
@@ -148,6 +199,9 @@ class Main(QMainWindow, Rotas):
             self.mensagem('Erro', 'Conta não encontrada')
 
     def depositar(self):
+        """
+        faz um deposito na conta do usuário logado e da um feedback visual atraves de um dialog em caso de sucesso ou de erro
+        """
         valor = self.tela_depositar.edit_valor.text()
         if valor != '':
             cliente_socket.send('depositar/{}/'.format(valor).encode())
@@ -160,6 +214,9 @@ class Main(QMainWindow, Rotas):
                 self.mensagem('Erro', 'Algo deu errado')
 
     def sacar(self):
+        """
+        faz um saque na conta do usuário logado e da um feedback visual atraves de um dialog em caso de sucesso ou de erro
+        """
         valor = self.tela_sacar.edit_valor.text()
         if valor != '':
             cliente_socket.send('sacar/{}/'.format(valor).encode())
@@ -172,6 +229,9 @@ class Main(QMainWindow, Rotas):
                 self.mensagem('Erro', 'Algo deu errado')
 
     def tranferir(self):
+        """
+        faz uma transferência do usuário logado para a conta de numero informado e dá um feedback visual para caso de sucesso ou erro
+        """
         valor = self.tela_transferir.edit_valor.text()
         destinatario = self.tela_transferir.edit_conta_Destinatario.text()
         if destinatario != '' and valor != '':
@@ -184,6 +244,9 @@ class Main(QMainWindow, Rotas):
                 self.mensagem('Erro', 'Algo deu errado')
 
     def extrato(self):
+        """
+        busca o extrato da conta logada e lista todos os elementos numa lista
+        """
         cliente_socket.send('extrato/'.encode())
         retorno = cliente_socket.recv(1024).decode()
         retorno = stringEmArray(retorno)
@@ -193,6 +256,13 @@ class Main(QMainWindow, Rotas):
         self.tela_extrato.edit_saldo.setText(saldo)
             
     def mensagem(self, titulo: str, mensagem: str):
+        """
+        mensagem que dispara um dialog na tela do usuário
+        :param titulo: string
+          titulo do dialog
+        :param mensagem: string
+          body do dialog
+        """
         QMessageBox.information(None, titulo, mensagem)
 
 

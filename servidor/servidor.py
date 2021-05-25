@@ -2,6 +2,7 @@ import socket
 from pessoa import Pessoa
 from conta import Conta
 
+'''abrindo a conexao do servidor'''
 ip = 'localhost'
 porta = 8004
 endereco = ((ip, porta))
@@ -12,10 +13,18 @@ servidor_socket.listen(1)
 conexao, cliente = servidor_socket.accept()
 
 conta_atual = None
-
 print('conectado')
 
 def stringEmArray(valor: str) -> list:
+  '''
+    converte uma string em array. Cada '/' indica o final de um endereco de memoria.
+    Utilizada para receber uma resposta do cliente através de uma string
+    O primeiro endereco de memoria da lista deve ser sempre o comando requerido pelo cliente
+    :param valor: str
+      string recebida para conversão
+    :return: list
+      retorna uma lista da string recebida
+  '''
   valores = []
   string = ''
   for caractere in valor:
@@ -28,13 +37,24 @@ def stringEmArray(valor: str) -> list:
 
 
 def conta_existe(numero_conta: str):
-    conta = Conta.busca_conta(numero_conta)
-    if conta != None:
-        return conta
-    return None
-
-
+  '''
+   verifica se o numero da conta digitada pertence a uma conta
+  :param numero_conta: str
+    numero da conta que vai buscar
+  :return:
+    objeto conta -> Se a conta com tal número existir
+    None -> Se não existir
+  '''
+  conta = Conta.busca_conta(numero_conta)
+  if conta != None:
+      return conta
+  return None
+ 
 while(True):
+    '''
+    o servidor recebe uma mensagem do cliente e retorna uma resposta se necessario.
+    se a mensagem recebida for uma string vazia, o servidor é encerrado.
+    '''
     mensagem_recebida = conexao.recv(1024).decode()    
     if mensagem_recebida == '':
       conexao.close()
@@ -46,7 +66,6 @@ while(True):
       valores = stringEmArray(mensagem_recebida)
       
       print(valores)
-
       if valores[0] == 'cadastrar_cliente':
         retorno = Pessoa.cadastrar(valores[1], valores[2], valores[3])
         conexao.send(str(retorno).encode())

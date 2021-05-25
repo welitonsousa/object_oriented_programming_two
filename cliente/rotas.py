@@ -2,6 +2,9 @@ from main import Ui_Main
 
 
 class Rotas(Ui_Main):
+    '''
+    composta de metodos para redirecionar para determinadas telas
+    '''
     def para_login(self):
         self.controle_telas.setCurrentIndex(self.index_login)
     def para_menu(self):
