@@ -1,6 +1,7 @@
 import socket
 from pessoa import Pessoa
 from conta import Conta
+from historico import Historico
 
 '''abrindo a conexao do servidor'''
 ip = 'localhost'
@@ -26,7 +27,7 @@ cursor = bd.cursor()
 
 pessoas = """CREATE TABLE IF NOT EXISTS pessoas(id integer PRIMARY KEY, nome text NOT NULL, sobrenome text NOT NULL, cpf text NOT NULL);"""
 contas = """CREATE TABLE IF NOT EXISTS contas(id integer PRIMARY KEY, id_pessoa integer NOT NULL, numero_conta text NOT NULL, saldo float NOT NULL, data_abertura text NOT NULL);"""
-historicos = """CREATE TABLE IF NOT EXISTS historicos(id integer PRIMARY KEY, numero_conta text NOT NULL, transacao text NOT NULL);"""
+historicos = """CREATE TABLE IF NOT EXISTS historicos(id integer PRIMARY KEY, id_conta text NOT NULL, transacao text NOT NULL);"""
 
 cursor.execute(pessoas)
 cursor.execute(contas)
@@ -140,7 +141,7 @@ while(True):
         conexao.send(retorno.encode())
       
       if(valores[0] == 'historico'):
-        historico = Conta.historico(conta_atual)
+        historico = Historico.get_historico(id_conta_atual, cursor)
         retorno = ''
         for i in historico:
           i = i.replace('/', '-')

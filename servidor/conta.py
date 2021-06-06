@@ -94,6 +94,8 @@ class Conta:
     if valor <= saldo and valor > 0:
       saldo -= valor
       cursor.execute(Conta.update_saldo, (saldo, id_conta))
+      nova_transacao = 'Saque\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
+      Historico.nova_trasacao(id_conta, nova_transacao, cursor)
       return True
     return False
 
@@ -111,6 +113,8 @@ class Conta:
     if valor > 0:
       saldo += valor
       cursor.execute(Conta.update_saldo, (saldo,  id_conta))
+      nova_transacao = 'Deposito\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
+      Historico.nova_trasacao(id_conta, nova_transacao, cursor)
       return True
     return False
 
@@ -132,7 +136,7 @@ class Conta:
     if self.sacar(valor):
       return destino.depositar(valor)
     return False
-  
+
   def historico(self) -> list:
     '''
     :param self: objeto conta
@@ -140,5 +144,6 @@ class Conta:
     :return: list
       returna uma lista com as transações
     '''
+
     return self._historico.get_historico()
 
