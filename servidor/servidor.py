@@ -78,7 +78,7 @@ while(True):
       bd.close()
       conexao.close()
       break
-    
+
     print('cliente: ' + mensagem_recebida)
     
     if mensagem_recebida != '':
@@ -115,7 +115,7 @@ while(True):
 
       if(valores[0] == 'depositar'):
         valor_deposito = valores[1]
-        retorno = str(Conta.depositar(conta_atual, float(valor_deposito)))
+        retorno = str(Conta.depositar(id_conta_atual, float(valor_deposito), cursor))
         conexao.send(retorno.encode())
 
       if(valores[0] == 'sacar'):
@@ -133,8 +133,9 @@ while(True):
           conexao.send(retorno.encode())
 
       if(valores[0] == 'extrato'):
-        data_abertura = conta_atual._data_abertura.replace('/','-')
-        saldo = conta_atual._saldo
+        saldo, data_abertura = list(cursor.execute('SELECT saldo, data_abertura FROM contas WHERE id="{}"'.format(id_conta_atual)))[0]
+
+        data_abertura = data_abertura.replace('/','-')
         retorno = str('{}/{}/'.format(data_abertura,saldo))
         conexao.send(retorno.encode())
       
@@ -145,3 +146,4 @@ while(True):
           i = i.replace('/', '-')
           retorno += '{}/'.format(i)
         conexao.send(retorno.encode())
+    bd.commit()

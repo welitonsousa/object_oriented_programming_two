@@ -58,7 +58,6 @@ class Conta:
     conta = Conta(id_pessoa)
     print(conta._saldo)
     cursor.execute("INSERT INTO contas (id_pessoa, numero_conta, saldo, data_abertura) VALUES(?,?,?,?)", (conta._id_titular, conta._numero, conta._saldo, conta._data_abertura))
-    print("conta criada")
     return conta._numero
   
   def busca_conta(numero_buscar: str, cursor):
@@ -70,9 +69,12 @@ class Conta:
       objeto conta -> Se a conta com tal número existir
       None -> Se não existir
     '''
-    id_conta = list(cursor.execute('SELECT id FROM contas WHERE numero_conta = {}'.format(numero_buscar)))
-    if (len(id_conta)!= 0):
-      return id_conta[0][0]
+
+    busca_conta = 'SELECT * FROM contas WHERE numero_conta="{}"'.format(numero_buscar)
+    contasads = list(cursor.execute(busca_conta))
+
+    if ( len(contasads) != 0):
+      return contasads[0][0]
     return False
 
   def sacar(id_conta, valor: float, cursor) -> bool:
@@ -88,15 +90,14 @@ class Conta:
       True -> se o saque foi realizado
       False -> se o saque não foi realizado
     '''
-    saldo = list(cursor.execute('SELECT saldo FROM contas WHERE id = {}'.format(id_conta))[0][0])
-    if valor <= saldo:
+    saldo = list(cursor.execute('SELECT saldo FROM contas WHERE id={}'.format(id_conta)))[0][0]
+    if valor <= saldo and valor > 0:
       saldo -= valor
-      # self._historico.nova_trasacao('Saque\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor))
-      cursor.execute(Conta.update_saldo, (saldo, 1))
+      cursor.execute(Conta.update_saldo, (saldo, id_conta))
       return True
     return False
 
-  def depositar(self, valor: float) -> bool:
+  def depositar(id_conta: str, valor: float, cursor) -> bool:
     '''
     deposita um dinheiro em determinada conta
     :param self: objeto conta
@@ -106,19 +107,12 @@ class Conta:
     :return: bool
       returna True
     '''
-    self._saldo += valor
-    self._historico.nova_trasacao('Deposito\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor))
-    return True
-
-  def extrato(self) -> str:
-    '''
-    :param self: objeto conta
-      conta para tirar o extrato
-    :return: str
-      string contem o numero da conta e o saldo atual
-    '''
-    self._historico.nova_trasacao('Extrato\nData: {}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M')))
-    return 'Numero: {} \nSaldo: {}'.format(self._numero, self._saldo)
+    saldo = list(cursor.execute('SELECT saldo FROM contas WHERE id="{}"'.format(id_conta)))[0][0]
+    if valor > 0:
+      saldo += valor
+      cursor.execute(Conta.update_saldo, (saldo,  id_conta))
+      return True
+    return False
 
   def transferir(self, valor: float, destino) -> bool:
     '''

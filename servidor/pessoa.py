@@ -55,7 +55,7 @@ class Pessoa:
     :param cpf_buscar: string
       cpf a ser buscado
     """
-    pessoa = list(cursor.execute('SELECT * FROM pessoas WHERE cpf = {}'.format(cpf_buscar)))
+    pessoa = list(cursor.execute('SELECT * FROM pessoas WHERE cpf = "{}"'.format(cpf_buscar)))
     if (len(pessoa)!= 0):
       return pessoa[0][0]
     return False
