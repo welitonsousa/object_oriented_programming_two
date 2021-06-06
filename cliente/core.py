@@ -41,7 +41,9 @@ class Main(QMainWindow, Rotas):
         self.tela_menu.botao_criar_conta.clicked.connect(self.para_criar_conta)
         self.tela_menu.botao_cadastrar_cliente.clicked.connect(self.para_cadastrar_cliente)
 
-        self.tela_menu.edit_numero_conta.setText('0')
+        cliente_socket.send('total_contas/'.encode())
+        total_contas = cliente_socket.recv(1024).decode()
+        self.tela_menu.edit_numero_conta.setText(str(total_contas))
         
         self.tela_cadastrar_cliente.botao_cadastrar.clicked.connect(self.cadastrar_cliente)
         self.tela_cadastrar_cliente.botao_menu.clicked.connect(self.para_menu)
@@ -70,7 +72,6 @@ class Main(QMainWindow, Rotas):
 
         self.tela_login.botao_historico.clicked.connect(self.botao_historico)
         self.tela_historico.botao_menu.clicked.connect(self.para_menu)
-        self.conta_atual = None
 
 
     def cadastrar_cliente(self):
