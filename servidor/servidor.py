@@ -13,12 +13,8 @@ servidor_socket.bind(endereco)
 servidor_socket.listen(1)
 conexao, cliente = servidor_socket.accept()
 
-conta_atual = None
 id_conta_atual = None
 print('conectado')
-
-
-
 
 import sqlite3
 
@@ -104,7 +100,8 @@ while(True):
         conexao.send(retorno.encode())
 
       if(valores[0] == 'total_contas'):
-        conexao.send(str(len(Conta.lista)).encode())
+        total = len(list(cursor.execute('SELECT * from contas')))
+        conexao.send(str(total).encode())
 
       if(valores[0] == 'conta_existe'):
         numero_conta = valores[1]
