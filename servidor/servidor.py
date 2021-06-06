@@ -13,6 +13,7 @@ servidor_socket.listen(1)
 conexao, cliente = servidor_socket.accept()
 
 conta_atual = None
+id_conta_atual = None
 print('conectado')
 
 
@@ -52,7 +53,7 @@ def stringEmArray(valor: str) -> list:
   return valores
 
 
-def conta_existe(numero_conta: str):
+def conta_existe(numero_conta: str, cursor):
   '''
    verifica se o numero da conta digitada pertence a uma conta
   :param numero_conta: str
@@ -61,9 +62,9 @@ def conta_existe(numero_conta: str):
     objeto conta -> Se a conta com tal número existir
     None -> Se não existir
   '''
-  conta = Conta.busca_conta(numero_conta)
-  if conta != None:
-      return conta
+  id_conta = Conta.busca_conta(numero_conta, cursor)
+  if id_conta != False:
+      return id_conta
   return None
  
 while(True):
@@ -91,12 +92,12 @@ while(True):
 
 
       if valores[0] == 'criar_conta':
-        pessoa = Pessoa.busca_pessoa(valores[1])
-        if (pessoa == None):
+        id_pessoa = Pessoa.busca_pessoa(valores[1], cursor)
+        if (id_pessoa == False):
           numero = 0
           retorno = 'False'
         else:
-          numero = Conta.criar_conta(pessoa)
+          numero = Conta.criar_conta(id_pessoa, cursor)
           retorno = 'True'
         retorno = '{}/{}/'.format(retorno, numero)
         conexao.send(retorno.encode())
@@ -106,8 +107,8 @@ while(True):
 
       if(valores[0] == 'conta_existe'):
         numero_conta = valores[1]
-        conta_atual = conta_existe(numero_conta)
-        if conta_atual == None:
+        id_conta_atual = conta_existe(numero_conta, cursor)
+        if id_conta_atual == None:
           conexao.send('False'.encode())
         else:
           conexao.send('True'.encode())
@@ -119,7 +120,7 @@ while(True):
 
       if(valores[0] == 'sacar'):
         valor_saque = valores[1]
-        retorno = str(Conta.sacar(conta_atual, float(valor_saque)))
+        retorno = str(Conta.sacar(id_conta_atual, float(valor_saque), cursor))
         conexao.send(retorno.encode())
 
       if(valores[0] == 'transferir'):

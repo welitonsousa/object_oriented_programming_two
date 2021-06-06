@@ -3,7 +3,6 @@ from historico import Historico
 from datetime import datetime
 import uuid
 
-
 class Conta:
 
   '''
@@ -16,7 +15,9 @@ class Conta:
     armazena todas as contas criadas
   '''
 
-  def __init__(self, titular: Pessoa):
+  update_saldo = """UPDATE contas SET saldo=? WHERE id=?;"""
+
+  def __init__(self, id_titular: int):
     '''
     :param titular: objeto da classe Pessoa
       titular da conta
@@ -30,7 +31,7 @@ class Conta:
       id único que representa o numero da conta
     :return: não retorna nada
     '''
-    self._titular = titular
+    self._id_titular = id_titular
     self._limite = 500
     self._saldo = 0
     self._historico = Historico()
@@ -45,7 +46,7 @@ class Conta:
   def data_abertura(self):
     return self._data_abertura
 
-  def criar_conta(pessoa: Pessoa):
+  def criar_conta(id_pessoa: int, cursor):
     '''
     Cria a conta, que é uma instancia da classe pessoa.
     Adiciona a conta na variavel list
@@ -54,11 +55,13 @@ class Conta:
     :return: str
       O numero da conta
     '''
-    conta = Conta(pessoa)
-    Conta.lista.append(conta)
+    conta = Conta(id_pessoa)
+    print(conta._saldo)
+    cursor.execute("INSERT INTO contas (id_pessoa, numero_conta, saldo, data_abertura) VALUES(?,?,?,?)", (conta._id_titular, conta._numero, conta._saldo, conta._data_abertura))
+    print("conta criada")
     return conta._numero
   
-  def busca_conta(numero_buscar: str):
+  def busca_conta(numero_buscar: str, cursor):
     '''
     verifica se o numero da conta digitada pertence a uma conta
     :param numero_buscar: str
@@ -67,12 +70,12 @@ class Conta:
       objeto conta -> Se a conta com tal número existir
       None -> Se não existir
     '''
-    for conta in Conta.lista:
-      if numero_buscar == conta._numero:
-        return conta
-    return None
+    id_conta = list(cursor.execute('SELECT id FROM contas WHERE numero_conta = {}'.format(numero_buscar)))
+    if (len(id_conta)!= 0):
+      return id_conta[0][0]
+    return False
 
-  def sacar(self, valor: float) -> bool:
+  def sacar(id_conta, valor: float, cursor) -> bool:
     '''
     saca um dinheiro de determinada conta
     :param self: objeto conta
@@ -85,9 +88,11 @@ class Conta:
       True -> se o saque foi realizado
       False -> se o saque não foi realizado
     '''
-    if valor <= self._saldo:
-      self._saldo -= valor
-      self._historico.nova_trasacao('Saque\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor))
+    saldo = list(cursor.execute('SELECT saldo FROM contas WHERE id = {}'.format(id_conta))[0][0])
+    if valor <= saldo:
+      saldo -= valor
+      # self._historico.nova_trasacao('Saque\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor))
+      cursor.execute(Conta.update_saldo, (saldo, 1))
       return True
     return False
 
