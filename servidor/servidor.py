@@ -116,21 +116,21 @@ while(True):
 
       if(valores[0] == 'depositar'):
         valor_deposito = valores[1]
-        retorno = str(Conta.depositar(id_conta_atual, float(valor_deposito), cursor))
+        retorno = str(Conta.depositar(id_conta_atual, float(valor_deposito), cursor, True))
         conexao.send(retorno.encode())
 
       if(valores[0] == 'sacar'):
         valor_saque = valores[1]
-        retorno = str(Conta.sacar(id_conta_atual, float(valor_saque), cursor))
+        retorno = str(Conta.sacar(id_conta_atual, float(valor_saque), cursor, True))
         conexao.send(retorno.encode())
 
       if(valores[0] == 'transferir'):
         valor = valores[1]
-        conta_destino = conta_existe(valores[2])
-        if(conta_destino == None):
+        id_destino = conta_existe(valores[2], cursor)
+        if(id_destino == None):
           conexao.send('False'.encode())
         else:
-          retorno = str(Conta.transferir(conta_atual, float(valor), conta_destino))
+          retorno = str(Conta.transferir(id_conta_atual, float(valor), id_destino, cursor))
           conexao.send(retorno.encode())
 
       if(valores[0] == 'extrato'):

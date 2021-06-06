@@ -77,7 +77,7 @@ class Conta:
       return contasads[0][0]
     return False
 
-  def sacar(id_conta, valor: float, cursor) -> bool:
+  def sacar(id_conta, valor: float, cursor, salvar) -> bool:
     '''
     saca um dinheiro de determinada conta
     :param self: objeto conta
@@ -94,12 +94,13 @@ class Conta:
     if valor <= saldo and valor > 0:
       saldo -= valor
       cursor.execute(Conta.update_saldo, (saldo, id_conta))
-      nova_transacao = 'Saque\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
-      Historico.nova_trasacao(id_conta, nova_transacao, cursor)
+      if salvar:
+        nova_transacao = 'Saque\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
+        Historico.nova_trasacao(id_conta, nova_transacao, cursor)
       return True
     return False
 
-  def depositar(id_conta: str, valor: float, cursor) -> bool:
+  def depositar(id_conta: str, valor: float, cursor, salvar) -> bool:
     '''
     deposita um dinheiro em determinada conta
     :param self: objeto conta
@@ -113,12 +114,13 @@ class Conta:
     if valor > 0:
       saldo += valor
       cursor.execute(Conta.update_saldo, (saldo,  id_conta))
-      nova_transacao = 'Deposito\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
-      Historico.nova_trasacao(id_conta, nova_transacao, cursor)
+      if salvar:
+        nova_transacao = 'Deposito\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
+        Historico.nova_trasacao(id_conta, nova_transacao, cursor)
       return True
     return False
 
-  def transferir(self, valor: float, destino) -> bool:
+  def transferir(id_conta: int, valor: float, id_destino: int, cursor) -> bool:
     '''
     transfere um valor de uma conta para outra
     :param self: objeto conta
@@ -133,17 +135,25 @@ class Conta:
       True -> transferencia realizada
       False -> transferencia não realizada
     '''
-    if self.sacar(valor):
-      return destino.depositar(valor)
+    
+    
+
+    if Conta.sacar(id_conta, valor, cursor, False):
+      if Conta.depositar(id_destino, valor, cursor, False):
+
+        id_pessoa = list(cursor.execute('SELECT id_pessoa FROM contas WHERE id={}'.format(id_destino)))[0][0]
+        nome, sobrenome = list(cursor.execute('SELECT nome, sobrenome FROM pessoas WHERE id={}'.format(id_pessoa)))[0]
+        nome_pessoa = nome+ ' ' + sobrenome
+        nova_transacao = 'Transferencia enviada para {}\nData: {}\nValor:{}\n'.format(nome_pessoa,datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
+        Historico.nova_trasacao(id_conta, nova_transacao, cursor)
+
+        id_pessoa = list(cursor.execute('SELECT id_pessoa FROM contas WHERE id={}'.format(id_conta)))[0][0]
+        nome , sobrenome = list(cursor.execute('SELECT nome, sobrenome FROM pessoas WHERE id={}'.format(id_pessoa)))[0]
+        nome_pessoa = nome+ ' ' + sobrenome
+
+        nova_transacao = 'Transferencia recebida de {}\nData: {}\nValor:{}\n'.format(nome_pessoa,datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
+        Historico.nova_trasacao(id_destino, nova_transacao, cursor)
+
+        return True
     return False
-
-  def historico(self) -> list:
-    '''
-    :param self: objeto conta
-      conta da qual vai ser impresso o historico
-    :return: list
-      returna uma lista com as transações
-    '''
-
-    return self._historico.get_historico()
 
