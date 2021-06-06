@@ -24,7 +24,7 @@ class Pessoa:
     self._sobrenome = sobrenome
     self._cpf = cpf
 
-  def cadastrar(nome: str, sobrenome: str, cpf: str):
+  def cadastrar(nome: str, sobrenome: str, cpf: str, cursor):
     """
     este método retorna um booleano dizendo se a pessoa foi cadastrada ou não no parametro estatico da classe
 
@@ -37,8 +37,8 @@ class Pessoa:
     """
 
 
-    if Pessoa.busca_pessoa(cpf) == None:
-      Pessoa.lista.append(Pessoa(nome, sobrenome, cpf))
+    if Pessoa.busca_pessoa(cpf, cursor) == False:
+      cursor.execute("INSERT INTO pessoas (nome, sobrenome, cpf) VALUES(?,?,?)", (nome, sobrenome, cpf))
       return True
     return False
 
@@ -49,13 +49,13 @@ class Pessoa:
     """
     return self._cpf
 
-  def busca_pessoa(cpf_buscar: str):
+  def busca_pessoa(cpf_buscar: str, cursor):
     """
     retorna uma instancia de Pessoa quando o cpf foi encontrado no atributo estatico da classe
     :param cpf_buscar: string
       cpf a ser buscado
     """
-    for pessoa in Pessoa.lista:
-      if pessoa.cpf == cpf_buscar:
-        return pessoa
-    return None
+    pessoa = list(cursor.execute('SELECT * FROM pessoas WHERE cpf = {}'.format(cpf_buscar)))
+    if (len(pessoa)!= 0):
+      return pessoa[0][0]
+    return False

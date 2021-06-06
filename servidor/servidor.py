@@ -15,6 +15,22 @@ conexao, cliente = servidor_socket.accept()
 conta_atual = None
 print('conectado')
 
+
+
+
+import sqlite3
+
+bd = sqlite3.connect('bd.sqlite')
+cursor = bd.cursor()
+
+pessoas = """CREATE TABLE IF NOT EXISTS pessoas(id integer PRIMARY KEY, nome text NOT NULL, sobrenome text NOT NULL, cpf text NOT NULL);"""
+contas = """CREATE TABLE IF NOT EXISTS contas(id integer PRIMARY KEY, id_pessoa integer NOT NULL, numero_conta text NOT NULL, saldo float NOT NULL, data_abertura text NOT NULL);"""
+historicos = """CREATE TABLE IF NOT EXISTS historicos(id integer PRIMARY KEY, numero_conta text NOT NULL, transacao text NOT NULL);"""
+
+cursor.execute(pessoas)
+cursor.execute(contas)
+cursor.execute(historicos)
+
 def stringEmArray(valor: str) -> list:
   '''
     converte uma string em array. Cada '/' indica o final de um endereco de memoria.
@@ -57,6 +73,8 @@ while(True):
     '''
     mensagem_recebida = conexao.recv(1024).decode()    
     if mensagem_recebida == '':
+      bd.commit()
+      bd.close()
       conexao.close()
       break
     
@@ -67,7 +85,8 @@ while(True):
       
       print(valores)
       if valores[0] == 'cadastrar_cliente':
-        retorno = Pessoa.cadastrar(valores[1], valores[2], valores[3])
+
+        retorno = Pessoa.cadastrar(valores[1], valores[2], valores[3], cursor)
         conexao.send(str(retorno).encode())
 
 
