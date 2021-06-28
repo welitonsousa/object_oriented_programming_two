@@ -15,7 +15,7 @@ class Conta:
     armazena todas as contas criadas
   '''
 
-  update_saldo = """UPDATE contas SET saldo=? WHERE id=?;"""
+  update_saldo = """UPDATE contas SET saldo=%s WHERE id=?;"""
 
   def __init__(self, id_titular: int):
     '''
@@ -57,7 +57,7 @@ class Conta:
     '''
     conta = Conta(id_pessoa)
     print(conta._saldo)
-    cursor.execute("INSERT INTO contas (id_pessoa, numero_conta, saldo, data_abertura) VALUES(?,?,?,?)", (conta._id_titular, conta._numero, conta._saldo, conta._data_abertura))
+    cursor.execute("INSERT INTO contas (id_pessoa, numero_conta, saldo, data_abertura) VALUES(%s,%s,%s,%s)", (conta._id_titular, conta._numero, conta._saldo, conta._data_abertura))
     return conta._numero
   
   def busca_conta(numero_buscar: str, cursor):
@@ -70,11 +70,11 @@ class Conta:
       None -> Se não existir
     '''
 
-    busca_conta = 'SELECT * FROM contas WHERE numero_conta="{}"'.format(numero_buscar)
-    contasads = list(cursor.execute(busca_conta))
-
-    if ( len(contasads) != 0):
-      return contasads[0][0]
+    busca_conta = 'SELECT id, numero_conta FROM contas'
+    cursor.execute(busca_conta)
+    for conta in cursor:
+      if conta[1] == numero_buscar:
+        return conta[0]
     return False
 
   def sacar(id_conta, valor: float, cursor, salvar) -> bool:
@@ -90,10 +90,14 @@ class Conta:
       True -> se o saque foi realizado
       False -> se o saque não foi realizado
     '''
-    saldo = list(cursor.execute('SELECT saldo FROM contas WHERE id={}'.format(id_conta)))[0][0]
+    saldo = 0.0
+    cursor.execute('SELECT id, saldo FROM contas')
+    for conta in cursor:
+      if conta[0] == id_conta:
+        saldo = conta[1]
     if valor <= saldo and valor > 0:
       saldo -= valor
-      cursor.execute(Conta.update_saldo, (saldo, id_conta))
+      cursor.execute("UPDATE contas SET saldo=%s WHERE id=%s", (float(saldo), int(id_conta)))
       if salvar:
         nova_transacao = 'Saque\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
         Historico.nova_trasacao(id_conta, nova_transacao, cursor)
@@ -110,10 +114,14 @@ class Conta:
     :return: bool
       returna True
     '''
-    saldo = list(cursor.execute('SELECT saldo FROM contas WHERE id="{}"'.format(id_conta)))[0][0]
+    saldo = 0.0
+    cursor.execute('SELECT id, saldo FROM contas')
+    for conta in cursor:
+      if conta[0] == id_conta:
+        saldo = conta[1]
     if valor > 0:
       saldo += valor
-      cursor.execute(Conta.update_saldo, (saldo,  id_conta))
+      cursor.execute("UPDATE contas SET saldo=%s WHERE id=%s", (float(saldo), int(id_conta)))
       if salvar:
         nova_transacao = 'Deposito\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
         Historico.nova_trasacao(id_conta, nova_transacao, cursor)
@@ -141,14 +149,36 @@ class Conta:
     if Conta.sacar(id_conta, valor, cursor, False):
       if Conta.depositar(id_destino, valor, cursor, False):
 
-        id_pessoa = list(cursor.execute('SELECT id_pessoa FROM contas WHERE id={}'.format(id_destino)))[0][0]
-        nome, sobrenome = list(cursor.execute('SELECT nome, sobrenome FROM pessoas WHERE id={}'.format(id_pessoa)))[0]
+        id_pessoa = None
+        cursor.execute('SELECT id, id_pessoa FROM contas')
+        for conta in cursor:
+          if (conta[0] == id_destino):
+            id_pessoa = conta[1]
+        
+
+        nome, sobrenome = None, None
+        cursor.execute('SELECT id, nome, sobrenome FROM pessoas ')
+        for conta in cursor:
+          if(conta[0] == id_pessoa):
+            nome = conta[1]
+            sobrenome = conta[2]
+
         nome_pessoa = nome+ ' ' + sobrenome
         nova_transacao = 'Transferencia enviada para {}\nData: {}\nValor:{}\n'.format(nome_pessoa,datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
         Historico.nova_trasacao(id_conta, nova_transacao, cursor)
 
-        id_pessoa = list(cursor.execute('SELECT id_pessoa FROM contas WHERE id={}'.format(id_conta)))[0][0]
-        nome , sobrenome = list(cursor.execute('SELECT nome, sobrenome FROM pessoas WHERE id={}'.format(id_pessoa)))[0]
+        id_pessoa = None
+        cursor.execute('SELECT id, id_pessoa FROM contas')
+        for conta in cursor:
+          if (conta[0] == id_destino):
+            id_pessoa = conta[1]
+
+        nome, sobrenome = None, None
+        cursor.execute('SELECT id, nome, sobrenome FROM pessoas ')
+        for conta in cursor:
+          if(conta[0] == id_pessoa):
+            nome = conta[1]
+            sobrenome = conta[2]
         nome_pessoa = nome+ ' ' + sobrenome
 
         nova_transacao = 'Transferencia recebida de {}\nData: {}\nValor:{}\n'.format(nome_pessoa,datetime.now().strftime('%d/%m/%Y %H:%M'), valor)

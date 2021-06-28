@@ -9,6 +9,7 @@ endereco = ((ip, porta))
 cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cliente_socket.connect(endereco)
 
+
 def stringEmArray(valor: str) -> list:
     '''
     converte uma string em array. Cada '/' indica o final de um endereco de memoria.

@@ -38,7 +38,7 @@ class Pessoa:
 
 
     if Pessoa.busca_pessoa(cpf, cursor) == False:
-      cursor.execute("INSERT INTO pessoas (nome, sobrenome, cpf) VALUES(?,?,?)", (nome, sobrenome, cpf))
+      cursor.execute("INSERT INTO pessoas (nome, sobrenome, cpf) VALUES(%s,%s,%s)", (nome, sobrenome, cpf))
       return True
     return False
 
@@ -55,7 +55,9 @@ class Pessoa:
     :param cpf_buscar: string
       cpf a ser buscado
     """
-    pessoa = list(cursor.execute('SELECT * FROM pessoas WHERE cpf = "{}"'.format(cpf_buscar)))
-    if (len(pessoa)!= 0):
-      return pessoa[0][0]
+    cursor.execute('SELECT id, cpf FROM pessoas')
+    for pessoa in cursor:
+      print(pessoa)
+      if (pessoa[1] == cpf_buscar):
+        return pessoa[0]
     return False
