@@ -60,7 +60,7 @@ class Conta:
     cursor.execute("INSERT INTO contas (id_pessoa, numero_conta, saldo, data_abertura) VALUES(%s,%s,%s,%s)", (conta._id_titular, conta._numero, conta._saldo, conta._data_abertura))
     return conta._numero
   
-  def busca_conta(numero_buscar: str, cursor):
+  def busca_conta(numero_buscar: str, cursor, sinc):
     '''
     verifica se o numero da conta digitada pertence a uma conta
     :param numero_buscar: str
@@ -69,8 +69,9 @@ class Conta:
       objeto conta -> Se a conta com tal número existir
       None -> Se não existir
     '''
-
+    sinc.acquire()
     busca_conta = 'SELECT id, numero_conta FROM contas'
+    sinc.release()
     cursor.execute(busca_conta)
     for conta in cursor:
       if conta[1] == numero_buscar:
@@ -104,7 +105,7 @@ class Conta:
       return True
     return False
 
-  def depositar(id_conta: str, valor: float, cursor, salvar) -> bool:
+  def depositar(id_conta: str, valor: float, cursor, salvar, sinc) -> bool:
     '''
     deposita um dinheiro em determinada conta
     :param self: objeto conta
@@ -115,16 +116,20 @@ class Conta:
       returna True
     '''
     saldo = 0.0
+    sinc.acquire()
     cursor.execute('SELECT id, saldo FROM contas')
+    sinc.release()
     for conta in cursor:
       if conta[0] == id_conta:
         saldo = conta[1]
     if valor > 0:
       saldo += valor
+      sinc.acquire()
       cursor.execute("UPDATE contas SET saldo=%s WHERE id=%s", (float(saldo), int(id_conta)))
+      sinc.release()
       if salvar:
         nova_transacao = 'Deposito\nData: {}\nValor:{}\n'.format(datetime.now().strftime('%d/%m/%Y %H:%M'), valor)
-        Historico.nova_trasacao(id_conta, nova_transacao, cursor)
+        Historico.nova_trasacao(id_conta, nova_transacao, cursor, sinc)
       return True
     return False
 

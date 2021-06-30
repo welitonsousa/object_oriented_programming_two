@@ -7,13 +7,15 @@ class Historico:
   def init(self):
     self._historico = []
 
-  def nova_trasacao(id_conta: str, valor: str, cursor) -> None:
+  def nova_trasacao(id_conta: str, valor: str, cursor, sinc) -> None:
     """
     adiciona uma nova transação feita na conta
     :param valor: string
       valor que será adicionado na operação realizada
     """
+    sinc.acquire()
     cursor.execute('INSERT INTO historicos (id_conta, transacao) VALUES(%s, %s)', (int(id_conta), valor))
+    sinc.release()
 
   def get_historico(id_conta:str, cursor) -> list:
     """
